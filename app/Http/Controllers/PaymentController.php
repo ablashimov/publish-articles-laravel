@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Subscription\PaymentRequest;
 use App\Services\Payment\Method;
 use Illuminate\Http\Response;
+use App\DTO\SuccessResponse as DtoResponse;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController
@@ -14,7 +15,7 @@ class PaymentController
     {
         $paymentMethod(Auth::user(), $paymentRequest);
 
-        return response()->json(['payment' => true], Response::HTTP_OK);
+        return response()->json((new DtoResponse)->toArray('success', true), Response::HTTP_OK);
     }
 
 }

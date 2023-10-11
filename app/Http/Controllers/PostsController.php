@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTO\SuccessResponse;
 use App\Enums\Statuses;
 use App\Http\Requests\Post\SearchRequest;
 use App\Http\Requests\Post\StoreRequest;
@@ -29,7 +30,7 @@ class PostsController
             $user->update(['posts_count' => ($user->posts_count - 1)]);
         }
 
-        return response()->json(['success' => true], 201);
+        return response()->json((new SuccessResponse)->toArray('success', true), 201);
     }
 
     public function search(SearchRequest $searchRequest)
@@ -39,17 +40,19 @@ class PostsController
         $context = new Context($requestData);
 
 
-        return response()->json(['posts' => $context->searchBy($posts)]);
+        return response()->json((new SuccessResponse)->toArray('posts', $context->searchBy($posts)));
     }
 
     public function index(Request $request)
     {
         $filterByUserName = $request->input('filter');
 
-        return response()->json([
-            'posts' => Post::where('status', Statuses::ACTIVE())
-                ->orderBy('user_name', $filterByUserName)
-                ->get()
-        ]);
+        return response()->json(
+            (new SuccessResponse)->toArray(
+                'posts',
+                Post::where('status', Statuses::ACTIVE())
+                    ->orderBy('user_name', $filterByUserName)
+                    ->get())
+        );
     }
 }
