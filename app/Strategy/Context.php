@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class Context
 {
-    public function __construct(private array $keyValueSearchParameter)
+    public function __construct(private array $searchParameter)
     {
     }
 
@@ -21,10 +21,10 @@ class Context
      */
     public function searchBy($posts): Builder|Collection
     {
-        return  match (key($this->keyValueSearchParameter)) {
-            'date' => (new Date())($this->keyValueSearchParameter, $posts),
-            'id' => (new Id())($this->keyValueSearchParameter, $posts),
-            'user_name' => (new UserName())($this->keyValueSearchParameter, $posts),
+        return  match (key($this->searchParameter)) {
+            'date' => (new Date())($this->searchParameter, $posts),
+            'id' => (new Id())($this->searchParameter, $posts),
+            'user_name' => (new UserName())($this->searchParameter, $posts),
             default => throw new \Exception('Unexpected search value'),
         };
     }
