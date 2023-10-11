@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,4 @@ Route::post('/post-store', [PostsController::class, 'store']);
 Route::get('/post-index', [PostsController::class, 'index']);
 
 Route::post('/payment', PaymentController::class);
+Route::post('/subscription', [SubscriptionController::class, 'store']);

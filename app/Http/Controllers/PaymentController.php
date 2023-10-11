@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use App\DTO\SuccessResponse as DtoResponse;
 use Illuminate\Support\Facades\Auth;
 
-class PaymentController
+class PaymentController extends Controller
 {
     public function __invoke(PaymentRequest $paymentRequest, Method $paymentMethod)
     {

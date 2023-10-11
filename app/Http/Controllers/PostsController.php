@@ -8,27 +8,15 @@ use App\Enums\Statuses;
 use App\Http\Requests\Post\SearchRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
+use App\Services\Post as PostService;
 use App\Strategy\Context;
-use Illuminate\Support\Facades\Auth;
-use LengthException;
 use Illuminate\Http\Request;
 
-class PostsController
+class PostsController extends Controller
 {
-    public function store(StoreRequest $storeRequest)
+    public function store(StoreRequest $storeRequest, PostService $postService)
     {
-        $user = Auth::user();
-        if ($user->posts_count <= 0) {
-            throw new LengthException('Not enough posts in your subscription, please top up your account');
-        }
-
-        Post::create([
-            'user_name' => $user->name,
-            'content' => $storeRequest->get('content')
-        ]);
-        if ($user->posts_count > 0) {
-            $user->update(['posts_count' => ($user->posts_count - 1)]);
-        }
+        $postService->store($storeRequest->get('content'));
 
         return response()->json((new SuccessResponse)->toArray('success', true), 201);
     }
@@ -52,7 +40,8 @@ class PostsController
                 'posts',
                 Post::where('status', Statuses::ACTIVE())
                     ->orderBy('user_name', $filterByUserName)
-                    ->get())
+                    ->get()
+            )
         );
     }
 }
